@@ -1,0 +1,12 @@
+[
+  {"rollNo":"1","name":"Aarav Sharma","mobile":"9876543210","dob":"2010-04-12"},
+  {"rollNo":"2","name":"Mira Patel","mobile":"9876501234","dob":"2010-07-22"},
+  {"rollNo":"3","name":"Rohan Gupta","mobile":"9876512345","dob":"2009-11-05"},
+  {"rollNo":"4","name":"Sana Khan","mobile":"9876523456","dob":"2011-02-18"},
+  {"rollNo":"5","name":"Kabir Singh","mobile":"9876534567","dob":"2009-09-30"},
+  {"rollNo":"6","name":"Isha Roy","mobile":"9876540123","dob":"2010-01-09"},
+  {"rollNo":"7","name":"Vivaan Mehta","mobile":"9876541122","dob":"2010-06-25"},
+  {"rollNo":"8","name":"Diya Rao","mobile":"9876542211","dob":"2011-12-03"},
+  {"rollNo":"9","name":"Arjun Nair","mobile":"9876543322","dob":"2009-03-14"},
+  {"rollNo":"10","name":"Leela Das","mobile":"9876544433","dob":"2010-08-07"}
+]

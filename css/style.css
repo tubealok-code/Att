@@ -1,0 +1,55 @@
+
+:root{
+  --bg:#f4f7fb;
+  --muted:#6b7280;
+  --primary:#0d6efd;
+  --accent:#0b5ed7;
+  --card:#ffffff;
+  --glass: rgba(255,255,255,0.6);
+}
+
+html,body{height:100%;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#111827}
+.app-header{z-index:1030;padding-top:0.6rem;padding-bottom:0.6rem}
+.app-header h1{font-weight:600;letter-spacing:0.2px}
+.brand-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--primary);}
+.brand-icon i{transform:translateY(1px)}
+.top-nav{z-index:1029}
+.nav-pills .nav-link{border-radius:12px;padding:0.6rem 0.9rem;font-weight:600}
+.nav-pills .nav-link.active{background:linear-gradient(90deg,var(--primary),var(--accent));color:#fff}
+.card-clickable{cursor:pointer;border-radius:0.8rem;transition:transform .15s ease, box-shadow .15s ease;border:0}
+.card-clickable:hover{transform:translateY(-4px);box-shadow:0 10px 22px rgba(15,23,42,0.08)}
+.card-body h6{color:var(--muted);font-weight:600}
+.card-body h3{font-weight:700;color:#0b1220}
+.sticky-summary{position:sticky;top:72px;z-index:1010;background:var(--card);border-radius:10px;padding:0.6rem}
+
+/* Table and controls */
+.table thead th{background:transparent;border-bottom:2px solid #eef2f7;font-weight:600;color:var(--muted)}
+.table tbody td{vertical-align:middle}
+.presentChk{width:18px;height:18px}
+
+/* Inputs and buttons */
+.form-control:focus{box-shadow:0 0 0 .15rem rgba(13,110,253,0.12);border-color:var(--primary)}
+.btn-primary{background:var(--primary);border:0}
+.btn-outline-primary{border-color:rgba(13,110,253,0.12)}
+
+/* Modal */
+.modal-content{border-radius:12px}
+
+/* Toasts */
+.toast{border-radius:8px}
+
+/* Loading overlay */
+.loading-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.18);z-index:2000}
+
+/* Search results and cards */
+#removeResult .border{background:var(--card)}
+
+/* Responsive tweaks */
+@media(min-width:768px){
+  .sticky-summary{top:84px}
+  .brand-icon{width:56px;height:56px}
+}
+
+/* Dark mode */
+:root.dark{--bg:#071029;--muted:#9aa6bf;--card:#071428;color:#e6eef8}
+

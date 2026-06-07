@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Attendance Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  </head>
+  <body>
+    <header class="app-header bg-primary text-white p-2 shadow-sm sticky-top">
+      <div class="container d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+          <div class="brand-icon bg-white bg-opacity-10 rounded-3 p-2"><i class="bi bi-mortarboard-fill fs-4"></i></div>
+          <div>
+            <h1 class="h5 mb-0">Attendance Management</h1>
+          <small id="currentDate">Loading date...</small>
+          </div>
+        </div>
+        <div class="text-end">
+          <div id="currentTime" class="fs-6">--:--:--</div>
+          <div class="form-check form-switch mt-1">
+            <input class="form-check-input" type="checkbox" id="darkToggle">
+            <label class="form-check-label text-white" for="darkToggle">Dark</label>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="sticky-top top-nav bg-light border-bottom">
+      <div class="container">
+        <ul class="nav nav-pills justify-content-around py-2" id="mainTabs">
+          <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#dashboardTab">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#markTab">Mark</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#otherTab">Other</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="container py-3 tab-content">
+      <!-- Dashboard -->
+      <section class="tab-pane active" id="dashboardTab">
+        <div class="row g-3">
+          <div class="col-6 col-md-3">
+            <div class="card card-clickable" data-action="totalStudents">
+              <div class="card-body text-center">
+                <h6>Total Enrolled</h6>
+                <h3 id="totalStudents">0</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card card-clickable" data-action="presentToday">
+              <div class="card-body text-center">
+                <h6>Present Today</h6>
+                <h3 id="presentToday">0</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card card-clickable" data-action="absentToday">
+              <div class="card-body text-center">
+                <h6>Absent Today</h6>
+                <h3 id="absentToday">0</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card card-clickable" data-action="absentLast">
+              <div class="card-body text-center">
+                <h6>Absent on Last Working Day</h6>
+                <h3 id="absentLast">0</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div id="dashboardListContainer"></div>
+      </section>
+
+      <!-- Mark -->
+      <section class="tab-pane" id="markTab">
+        <div class="sticky-summary p-2 mb-2 bg-white shadow-sm rounded">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>Total Students: <span id="summaryTotal">0</span></div>
+            <div>Present: <span id="summaryPresent">0</span></div>
+            <div>Absent: <span id="summaryAbsent">0</span></div>
+            <div>
+              <button class="btn btn-sm btn-primary" id="saveAttendance">Save Attendance</button>
+              <button class="btn btn-sm btn-secondary" id="editAttendance">Edit Previous</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-striped" id="attendanceTable">
+            <thead>
+              <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Present</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Other -->
+      <section class="tab-pane" id="otherTab">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <div class="card mb-3">
+              <div class="card-header">Add Student</div>
+              <div class="card-body">
+                <form id="addStudentForm">
+                  <div class="mb-2">
+                    <label class="form-label">Roll Number</label>
+                    <input class="form-control" id="addRoll" required>
+                    <div class="invalid-feedback" id="rollExists">‼️ Roll Number Already Exists</div>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Student Name</label>
+                    <input class="form-control" id="addName" required>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Mobile</label>
+                    <input class="form-control" id="addMobile" required>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="addDob" required>
+                  </div>
+                  <button class="btn btn-success" id="saveStudentBtn">Save Student</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="card mb-3">
+              <div class="card-header">Remove Student</div>
+              <div class="card-body">
+                <div class="input-group mb-2">
+                  <input class="form-control" id="removeSearch" placeholder="Search by roll or name">
+                  <button class="btn btn-outline-secondary" id="removeSearchBtn">Search</button>
+                </div>
+                <div id="removeResult"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="card mb-3">
+              <div class="card-header">Attendance Data Reports</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <label class="form-label">Date Wise Report</label>
+                  <input type="date" id="reportDate" class="form-control mb-2">
+                  <button class="btn btn-primary mb-2" id="runDateReport">Run</button>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Student Wise Report</label>
+                  <div class="input-group">
+                    <input class="form-control" id="reportStudentSearch" placeholder="Roll or Name">
+                    <button class="btn btn-outline-secondary" id="runStudentReport">Search</button>
+                  </div>
+                </div>
+                <hr>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-primary" id="exportCsv">Export CSV</button>
+                  <button class="btn btn-outline-primary" id="exportXlsx">Export Excel</button>
+                  <button class="btn btn-outline-primary" id="exportPdf">Export PDF</button>
+                </div>
+                <div id="reportOutput" class="mt-3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal fade" id="listModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="listModalTitle">List</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="listModalBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toasts -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+      <div id="toastContainer"></div>
+    </div>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/students.js"></script>
+    <script type="module" src="js/attendance.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="js/reports.js"></script>
+    <script type="module" src="js/export.js"></script>
+  </body>
+</html>
