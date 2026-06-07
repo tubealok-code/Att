@@ -20,8 +20,8 @@ async function refreshDashboard(){
   const today = formatDateISO(new Date());
   const q = query(attendanceCol, where('attendanceDate','==',today));
   const snap = await getDocs(q);
-  let present=0, absent=0; const presentIds=[]; const absentIds=[];
-  snap.forEach(d=>{ const s=d.data(); if(s.status==='present'){ present++; presentIds.push(s.studentId); } else { absent++; absentIds.push(s.studentId); } });
+  let present=0, absent=0;
+  snap.forEach(d=>{ const s=d.data(); if(s.status==='present'){ present++; } else { absent++; } });
   presentEl.textContent = present; absentEl.textContent = absent;
 
   // last working day (yesterday simple)

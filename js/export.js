@@ -6,7 +6,7 @@ import { showToast } from './app.js';
 const exportCsvBtn = document.getElementById('exportCsv');
 const exportXlsxBtn = document.getElementById('exportXlsx');
 const exportPdfBtn = document.getElementById('exportPdf');
-const reportDateInput = document.getElementById('reportDate');
+const reportDateInput = document.getElementById('exportReportDate');
 const attendanceCol = collection(db,'attendance');
 
 async function buildDateReportRows(date){
@@ -18,25 +18,25 @@ async function buildDateReportRows(date){
 
 exportCsvBtn.addEventListener('click', async ()=>{
   const date = reportDateInput.value;
-  if(!date){ showToast('Select a date to export date-wise','error'); return; }
+  if(!date){ showToast('Select a date to export date-wise', {type:'error'}); return; }
   const rows = await buildDateReportRows(date);
   const csv = [ ['Roll','Name','Status'], ...rows.map(r=>[r.roll,r.name,r.status]) ].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`attendance_${date}.csv`; a.click(); URL.revokeObjectURL(url);
-  showToast('CSV exported','success');
+  showToast('CSV exported', {type:'success'});
 });
 
 exportXlsxBtn.addEventListener('click', async ()=>{
-  const date = reportDateInput.value; if(!date){ showToast('Select a date to export','error'); return; }
+  const date = reportDateInput.value; if(!date){ showToast('Select a date to export', {type:'error'}); return; }
   const rows = await buildDateReportRows(date);
   const ws = XLSX.utils.json_to_sheet(rows);
   const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Attendance');
   XLSX.writeFile(wb, `attendance_${date}.xlsx`);
-  showToast('Excel exported','success');
+  showToast('Excel exported', {type:'success'});
 });
 
 exportPdfBtn.addEventListener('click', async ()=>{
-  const date = reportDateInput.value; if(!date){ showToast('Select a date to export','error'); return; }
+  const date = reportDateInput.value; if(!date){ showToast('Select a date to export', {type:'error'}); return; }
   const rows = await buildDateReportRows(date);
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
@@ -44,5 +44,5 @@ exportPdfBtn.addEventListener('click', async ()=>{
   const body = rows.map(r=> [r.roll, r.name, r.status]);
   doc.autoTable({ startY:22, head:[['Roll','Name','Status']], body });
   doc.save(`attendance_${date}.pdf`);
-  showToast('PDF exported','success');
+  showToast('PDF exported', {type:'success'});
 });

@@ -54,9 +54,9 @@ async function saveAttendanceForDate(date){
       updates.push(setDoc(ref, { studentId, attendanceDate: date, status, updatedAt: serverTimestamp() }));
     });
     await Promise.all(updates);
-    showToast('Attendance saved','success');
+    showToast('Attendance saved', {type:'success'});
     window.dispatchEvent(new CustomEvent('attendance:changed'));
-  }catch(e){ console.error(e); showToast('Save failed','error'); }
+  }catch(e){ console.error(e); showToast('Save failed', {type:'error'}); }
   hideLoading();
 }
 
@@ -82,8 +82,8 @@ async function loadAttendanceForDate(date){
     snap.forEach(d=>{ const data=d.data(); map[data.studentId]=data.status; });
     tableBody.querySelectorAll('input.presentChk').forEach(i=>{ const st=map[i.dataset.id]; if(st) i.checked = st==='present'; });
     updateSummaryCounts();
-    showToast(`Loaded attendance for ${date}`,'success');
-  }catch(e){ console.error(e); showToast('Failed to load','error'); }
+    showToast(`Loaded attendance for ${date}`, {type:'success'});
+  }catch(e){ console.error(e); showToast('Failed to load', {type:'error'}); }
   hideLoading();
 }
 

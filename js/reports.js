@@ -12,7 +12,7 @@ const reportOutput = document.getElementById('reportOutput');
 const attendanceCol = collection(db,'attendance');
 
 runDateReport.addEventListener('click', async ()=>{
-  const date = reportDate.value; if(!date){ showToast('Select date','error'); return; }
+  const date = reportDate.value; if(!date){ showToast('Select date', {type:'error'}); return; }
   showLoading();
   try{
     const students = await getAllStudents();
@@ -20,7 +20,7 @@ runDateReport.addEventListener('click', async ()=>{
     const snap = await getDocs(q); const map={}; snap.forEach(d=> map[d.data().studentId]=d.data().status);
     const rows = students.map(s=> `<tr><td>${s.rollNo}</td><td>${s.name}</td><td>${map[s.id]||'absent'}</td></tr>`);
     reportOutput.innerHTML = `<h6>Date: ${date}</h6><div class="table-responsive"><table class="table table-sm"><thead><tr><th>Roll</th><th>Name</th><th>Status</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
-  }catch(e){ console.error(e); showToast('Report failed','error'); }
+  }catch(e){ console.error(e); showToast('Report failed', {type:'error'}); }
   hideLoading();
 });
 
@@ -40,6 +40,6 @@ runStudentReport.addEventListener('click', async ()=>{
     snap.forEach(d=>{ const s=d.data(); if(s.status==='present') present++; else absent++; days.push(s.attendanceDate); });
     const total = present+absent; const pct = total? Math.round((present/total)*100):0;
     reportOutput.innerHTML = `<h6>${student.name} (${student.rollNo})</h6><p>Total Present: ${present} | Total Absent: ${absent} | Percentage: ${pct}%</p>`;
-  }catch(e){ console.error(e); showToast('Search failed','error'); }
+  }catch(e){ console.error(e); showToast('Search failed', {type:'error'}); }
   hideLoading();
 });

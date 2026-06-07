@@ -119,28 +119,32 @@
         <div class="row">
           <div class="col-12 col-md-6">
             <div class="card mb-3">
-              <div class="card-header">Add Student</div>
+              <div class="card-header">Add Students (Bulk)</div>
               <div class="card-body">
-                <form id="addStudentForm">
-                  <div class="mb-2">
-                    <label class="form-label">Roll Number</label>
-                    <input class="form-control" id="addRoll" required>
-                    <div class="invalid-feedback" id="rollExists">‼️ Roll Number Already Exists</div>
+                <div class="table-responsive">
+                  <table class="table table-sm table-bordered" id="bulkAddTable">
+                    <thead>
+                      <tr>
+                        <th style="width: 15%">Roll No</th>
+                        <th style="width: 30%">Name</th>
+                        <th style="width: 25%">Mobile</th>
+                        <th style="width: 25%">Date of Birth</th>
+                        <th style="width: 5%"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="bulkAddTableBody">
+                    </tbody>
+                  </table>
+                </div>
+                <div class="d-flex gap-2">
+                  <div class="d-flex gap-2 align-items-center">
+                    <input type="file" id="importStudentsFile" accept=".xlsx,.xls,.csv" class="form-control form-control-sm" style="width: 240px">
+                    <button class="btn btn-outline-primary" id="importStudentsBtn">Import File</button>
+                    <button class="btn btn-success" id="saveBulkStudents">Save All Students</button>
+                    <button class="btn btn-secondary" id="clearBulkTable">Clear All</button>
                   </div>
-                  <div class="mb-2">
-                    <label class="form-label">Student Name</label>
-                    <input class="form-control" id="addName" required>
-                  </div>
-                  <div class="mb-2">
-                    <label class="form-label">Mobile</label>
-                    <input class="form-control" id="addMobile" required>
-                  </div>
-                  <div class="mb-2">
-                    <label class="form-label">Date of Birth</label>
-                    <input type="date" class="form-control" id="addDob" required>
-                  </div>
-                  <button class="btn btn-success" id="saveStudentBtn">Save Student</button>
-                </form>
+                </div>
+                <div id="bulkAddMessages" class="mt-2"></div>
               </div>
             </div>
 
@@ -173,10 +177,16 @@
                   </div>
                 </div>
                 <hr>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-outline-primary" id="exportCsv">Export CSV</button>
-                  <button class="btn btn-outline-primary" id="exportXlsx">Export Excel</button>
-                  <button class="btn btn-outline-primary" id="exportPdf">Export PDF</button>
+                <div class="mb-2">
+                  <label class="form-label">Export Reports</label>
+                  <div class="mb-2">
+                    <input type="date" id="exportReportDate" class="form-control mb-2">
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary" id="exportCsv">Export CSV</button>
+                    <button class="btn btn-outline-primary" id="exportXlsx">Export Excel</button>
+                    <button class="btn btn-outline-primary" id="exportPdf">Export PDF</button>
+                  </div>
                 </div>
                 <div id="reportOutput" class="mt-3"></div>
               </div>
